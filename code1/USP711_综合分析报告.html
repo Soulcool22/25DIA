@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USP711溶解度测试失败率预测分析</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #7f8c8d;
+            margin-top: 25px;
+        }
+        .summary-box {
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        .risk-high {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .risk-medium {
+            color: #f39c12;
+            font-weight: bold;
+        }
+        .risk-low {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>USP711溶解度测试失败率预测分析</h1>
+        
+        <div class="summary-box">
+            <h3>分析日期：2025-09-23</h3>
+            <p><strong>数据概览：</strong></p>
+            <ul>
+                <li>分析批次数：3个</li>
+                <li>总药片数：72片</li>
+                <li>每批次药片数：24片</li>
+            </ul>
+        </div>
+        
+        <h2>执行摘要</h2>
+        
+        <h3>关键发现</h3>
+        <ul>
+            <li>所有批次数据均符合正态分布假设（Shapiro-Wilk检验p>0.05）</li>
+            <li>批次间存在显著差异（ANOVA p<0.001），需要考虑批次效应</li>
+            <li>第一阶段测试失败率接近100%，表明当前Q值设定可能过于严格</li>
+            <li>整体测试通过率较高，主要通过第二或第三阶段</li>
+            <li>批次B002风险最高，预测失败率约37%</li>
+
+        </ul>
+        
+        <h3>主要建议</h3>
+        <ul>
+            <li>建议重新评估第一阶段的Q+5%标准，考虑调整为更合理的阈值</li>
+            <li>加强对批次B002类似特征批次的质量控制</li>
+            <li>建立基于历史数据的预测模型，用于新批次风险评估</li>
+            <li>实施分层抽样策略，提高测试效率</li>
+
+        </ul>
+        
+        <h2>详细分析结果</h2>
+        
+        <h3>描述性统计</h3>
+        <div class="highlight">
+            <p><strong>总体统计：</strong></p>
+            <ul>
+                <li>总体均值：82.15%</li>
+                <li>总体标准差：3.01%</li>
+                <li>数据范围：[75.0%, 88.0%]</li>
+            </ul>
+        </div>
+        
+        <h3>各批次对比</h3>
+        <table>
+            <tr>
+                <th>批次</th>
+                <th>均值 (%)</th>
+                <th>标准差 (%)</th>
+                <th>最小值 (%)</th>
+                <th>最大值 (%)</th>
+                <th>变异系数</th>
+                <th>风险等级</th>
+            </tr>
+
+            <tr>
+                <td>批次B001</td>
+                <td>83.83</td>
+                <td>2.35</td>
+                <td>78.0</td>
+                <td>88.0</td>
+                <td>0.0281</td>
+                <td class="risk-low">低</td>
+            </tr>
+
+            <tr>
+                <td>批次B002</td>
+                <td>80.00</td>
+                <td>2.00</td>
+                <td>75.0</td>
+                <td>83.0</td>
+                <td>0.0250</td>
+                <td class="risk-high">高</td>
+            </tr>
+
+            <tr>
+                <td>批次B003</td>
+                <td>82.62</td>
+                <td>3.23</td>
+                <td>75.0</td>
+                <td>88.0</td>
+                <td>0.0391</td>
+                <td class="risk-low">低</td>
+            </tr>
+
+        </table>
+        
+        <h3>失败率预测结果</h3>
+        <div class="highlight">
+            <p><strong>蒙特卡洛模拟结果（10,000次模拟）：</strong></p>
+            <ul>
+                <li>第一阶段失败率：100.0%</li>
+                <li>第二阶段失败率：0.56%</li>
+                <li>第三阶段失败率：0.0%</li>
+                <li>整体测试失败率：0.0%</li>
+            </ul>
+        </div>
+        
+        <h3>各批次风险评估</h3>
+        <table>
+            <tr>
+                <th>批次</th>
+                <th>预测失败率</th>
+                <th>风险等级</th>
+                <th>建议措施</th>
+            </tr>
+
+            <tr>
+                <td>批次B001</td>
+                <td>0.0%</td>
+                <td class="risk-low">低</td>
+                <td>维持当前质量控制水平</td>
+            </tr>
+
+            <tr>
+                <td>批次B002</td>
+                <td>36.9%</td>
+                <td class="risk-high">高</td>
+                <td>加强质量控制，重点监控溶解度均匀性</td>
+            </tr>
+
+            <tr>
+                <td>批次B003</td>
+                <td>0.0%</td>
+                <td class="risk-low">低</td>
+                <td>维持当前质量控制水平</td>
+            </tr>
+
+        </table>
+        
+        <h3>统计模型</h3>
+        <div class="highlight">
+            <p><strong>最佳拟合分布：</strong>Normal分布</p>
+            <p><strong>参数估计：</strong></p>
+            <ul>
+                <li>均值 (μ)：82.15%</li>
+                <li>标准差 (σ)：2.99%</li>
+            </ul>
+            <p><strong>模型验证：</strong></p>
+            <ul>
+                <li>正态性检验：Passed (p>0.05)</li>
+                <li>拟合优度：Excellent (AIC comparison)</li>
+                <li>交叉验证：Satisfactory</li>
+            </ul>
+        </div>
+        
+        <h2>结论与建议</h2>
+        
+        <div class="highlight">
+            <h3>主要结论</h3>
+            <ol>
+                <li><strong>测试标准评估：</strong>当前USP711第一阶段标准（Q+5%=85%）过于严格，导致几乎所有批次都无法通过第一阶段测试。</li>
+                <li><strong>批次差异：</strong>三个批次间存在显著统计学差异，其中批次B002风险最高，预测失败率达37%。</li>
+                <li><strong>整体风险：</strong>基于合并数据的预测显示，整体测试失败率很低，主要风险集中在个别批次。</li>
+                <li><strong>模型可靠性：</strong>建立的正态分布模型具有良好的拟合度和预测能力。</li>
+            </ol>
+            
+            <h3>改进建议</h3>
+            <ol>
+                <li><strong>标准优化：</strong>建议重新评估第一阶段的接受标准，考虑将Q+5%调整为更合理的阈值。</li>
+                <li><strong>风险管控：</strong>对于类似批次B002的高风险批次，建议增加抽样数量和检测频次。</li>
+                <li><strong>预测应用：</strong>将建立的统计模型应用于新批次的风险预评估，实现预防性质量控制。</li>
+                <li><strong>持续监控：</strong>建立基于历史数据的动态更新机制，持续优化预测模型。</li>
+            </ol>
+        </div>
+        
+        <div class="footer">
+            <p>本报告基于USP711溶解度测试标准和蒙特卡洛模拟方法生成</p>
+            <p>生成时间：2025-09-23 20:11:43</p>
+        </div>
+    </div>
+</body>
+</html>
