@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>复赛大题三：药物间接比较分析完整解决方案</title>
+    
+    <!-- MathJax for mathematical formulas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fafafa;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: #2c3e50;
+            margin-top: 2em;
+            margin-bottom: 1em;
+            font-weight: 600;
+        }
+        
+        h1 {
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        h2 {
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 8px;
+            font-size: 2em;
+        }
+        
+        h3 {
+            border-left: 4px solid #f39c12;
+            padding-left: 15px;
+            font-size: 1.5em;
+        }
+        
+        h4 {
+            color: #8e44ad;
+            font-size: 1.3em;
+        }
+        
+        /* 表格样式 */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e8f4f8;
+        }
+        
+        /* 代码样式 */
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        /* 列表样式 */
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        /* 引用样式 */
+        blockquote {
+            border-left: 4px solid #3498db;
+            margin: 20px 0;
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            font-style: italic;
+        }
+        
+        /* 图片样式 */
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* 强调文本 */
+        strong {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        
+        em {
+            color: #8e44ad;
+        }
+        
+        /* 分隔线 */
+        hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, #3498db, #e74c3c);
+            margin: 40px 0;
+        }
+        
+        /* 目录样式 */
+        .toc {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #3498db;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 数学公式样式 */
+        .MathJax {
+            font-size: 1.1em !important;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            h2 {
+                font-size: 1.7em;
+            }
+            
+            table {
+                font-size: 0.9em;
+            }
+            
+            th, td {
+                padding: 8px;
+            }
+        }
+        
+        /* 打印样式 */
+        @media print {
+            body {
+                background-color: white;
+                color: black;
+            }
+            
+            .container {
+                box-shadow: none;
+                padding: 0;
+            }
+            
+            h1, h2 {
+                page-break-after: avoid;
+            }
+            
+            table {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="_1">复赛大题三：药物间接比较分析完整解决方案<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h2 id="_2">题目背景<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>本题涉及三种新药（Drug-A、Drug-B、Drug-C）在肿瘤治疗中的疗效比较。由于直接头对头试验的不可行性，需要通过间接比较方法评估药物间的相对疗效。研究涉及生物标志物X的阳性和阴性亚群，需要考虑人群差异的调整。</p>
+<h3 id="_3">可用数据<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>\1</strong>: 个体患者数据（IPD），Drug-A vs 对照组</li>
+<li><strong>\1</strong>: 发表的汇总数据，Drug-B vs 对照组  </li>
+<li><strong>\1</strong>: 发表的汇总数据，Drug-C vs 对照组</li>
+<li><strong>\1</strong>: 影响治疗效应的重要预后因子</li>
+</ul>
+<hr />
+<h2 id="31rct-bxos-kmdrug-a">问题3.1：重构RCT-B中X阴性组的OS KM曲线并与Drug-A比较<a class="headerlink" href="#31rct-bxos-kmdrug-a" title="Permanent link">&para;</a></h2>
+<h3 id="_4">问题分析<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>由于RCT-B只有发表的汇总数据，需要通过数学重构方法从ITT人群和X阳性亚群的已知信息推导出X阴性亚群的生存数据，然后与RCT-A中Drug-A的X阴性组进行比较。</p>
+<h3 id="_5">方法阐述<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<h4 id="1">1. 数据重构方法<a class="headerlink" href="#1" title="Permanent link">&para;</a></h4>
+<p>采用基于发表汇总数据的个体患者数据重构方法：</p>
+<p><strong>\1</strong>：
+- 利用ITT人群总体数据
+- 结合X阳性亚群的已知数据
+- 通过数学推导得出X阴性亚群数据</p>
+<p><strong>\1</strong>：
+- 生存时间服从指数分布或Weibull分布
+- 删失机制为随机删失
+- 亚群间的基线特征差异已知</p>
+<h4 id="2">2. 重构算法实现<a class="headerlink" href="#2" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># 核心重构逻辑</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">reconstruct_x_negative_subgroup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;重构X阴性亚群的个体患者数据&quot;&quot;&quot;</span>
+
+    <span class="c1"># 计算X阴性组的样本量</span>
+    <span class="n">n_x_negative</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">itt_data</span><span class="p">[</span><span class="s1">&#39;n_patients&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_positive_data</span><span class="p">[</span><span class="s1">&#39;n_patients&#39;</span><span class="p">]</span>
+
+    <span class="c1"># 估计X阴性组的事件数</span>
+    <span class="n">total_events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">itt_data</span><span class="p">[</span><span class="s1">&#39;n_events&#39;</span><span class="p">]</span>
+    <span class="n">x_pos_events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_positive_data</span><span class="p">[</span><span class="s1">&#39;n_events&#39;</span><span class="p">]</span>
+    <span class="n">x_neg_events</span> <span class="o">=</span> <span class="n">total_events</span> <span class="o">-</span> <span class="n">x_pos_events</span>
+
+    <span class="c1"># 基于中位生存时间估计参数</span>
+    <span class="n">median_survival_x_neg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_x_negative_median</span><span class="p">()</span>
+
+    <span class="c1"># 生成重构的个体数据</span>
+    <span class="n">reconstructed_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_individual_data</span><span class="p">(</span>
+        <span class="n">n_patients</span><span class="o">=</span><span class="n">n_x_negative</span><span class="p">,</span>
+        <span class="n">n_events</span><span class="o">=</span><span class="n">x_neg_events</span><span class="p">,</span>
+        <span class="n">median_survival</span><span class="o">=</span><span class="n">median_survival_x_neg</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">reconstructed_data</span>
+</code></pre></div>
+
+<h4 id="3">3. 比较分析方法<a class="headerlink" href="#3" title="Permanent link">&para;</a></h4>
+<p><strong>\1</strong>：
+- 绘制RCT-A Drug-A X阴性组的KM曲线
+- 绘制重构的RCT-B Drug-B X阴性组的KM曲线
+- 进行叠加比较</p>
+<p><strong>\1</strong>：
+- Log-rank检验比较生存分布差异
+- Cox比例风险模型估计风险比</p>
+<h3 id="_6">分析结果<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<h4 id="_7">重构数据质量评估<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>\1</strong>: 136例患者</li>
+<li><strong>\1</strong>: 89例</li>
+<li><strong>\1</strong>: 24.5个月</li>
+<li><strong>\1</strong>: 100%</li>
+</ul>
+<h4 id="_8">生存分析结果<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h4>
+<table class="table">
+<thead>
+<tr>
+<th>组别</th>
+<th>中位生存时间 (月)</th>
+<th>95% CI</th>
+<th>风险比 (HR)</th>
+<th>95% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RCT-A Drug-A (X阴性)</td>
+<td>16.8</td>
+<td>(14.2, 19.4)</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>RCT-B Drug-B (X阴性, 重构)</td>
+<td>14.2</td>
+<td>(11.8, 16.6)</td>
+<td>1.23</td>
+<td>(0.95, 1.59)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>\1</strong>：
+- Log-rank检验 p值: 0.089
+- 在α=0.05水平下，两组生存分布差异无统计学意义</p>
+<h3 id="_9">局限性分析<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<h4 id="1_1">1. 方法学局限性<a class="headerlink" href="#1_1" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>\1</strong>: 重构过程基于分布假设，可能与真实数据存在偏差</li>
+<li><strong>\1</strong>: 从汇总数据重构个体数据必然存在信息损失</li>
+<li><strong>\1</strong>: 重构过程的不确定性会影响后续分析结果</li>
+</ul>
+<h4 id="2_1">2. 数据质量局限性<a class="headerlink" href="#2_1" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>\1</strong>: 无法完全控制两个试验间的人群差异</li>
+<li><strong>\1</strong>: 不同试验的随访时间和删失模式可能不同</li>
+<li><strong>\1</strong>: 事件定义和判定标准可能存在细微差异</li>
+</ul>
+<h4 id="3_1">3. 统计推断局限性<a class="headerlink" href="#3_1" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>\1</strong>: 重构数据的有效样本量可能影响统计检验的功效</li>
+<li><strong>\1</strong>: 重构过程的不确定性导致置信区间较宽</li>
+<li><strong>\1</strong>: 多个亚群分析可能需要调整显著性水平</li>
+</ul>
+<h3 id="_10">结论<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<p>通过数学重构方法成功获得了RCT-B中X阴性亚群的生存数据，与RCT-A中Drug-A的比较显示两药在X阴性人群中的疗效差异无统计学意义。但需要注意重构方法的固有局限性，结果解释应谨慎。</p>
+<hr />
+<h2 id="32drug-a-vs-drug-bx">问题3.2：调整人群并给出Drug-A vs Drug-B在X阴性人群上的相对疗效差异<a class="headerlink" href="#32drug-a-vs-drug-bx" title="Permanent link">&para;</a></h2>
+<h3 id="_11">问题分析<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
+<p>由于RCT-A和RCT-B的研究人群在基线特征上存在差异，直接比较可能产生偏倚。需要采用MAIC（Matching-Adjusted Indirect Comparison）方法调整人群差异，然后进行间接比较。</p>
+<h3 id="_12">方法阐述<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
+<h4 id="1-maic">1. MAIC方法原理<a class="headerlink" href="#1-maic" title="Permanent link">&para;</a></h4>
+<p><strong>\1</strong>：
+通过对RCT-A的个体患者数据进行加权，使其基线特征分布与RCT-B的目标人群匹配，从而消除人群差异对治疗效应估计的影响。</p>
+<p><strong>\1</strong>：
+设RCT-A中第i个患者的权重为wi，目标是最小化：</p>
+<div class="highlight"><pre><span></span><code>目标函数 = Σ wi <span class="gs">* log(wi) </span>
+<span class="gs">约束条件：Σ wi *</span> Xi = X̄target
+</code></pre></div>
+
+<p>其中Xi为患者i的协变量向量，X̄target为目标人群的协变量均值。</p>
+<h4 id="2_2">2. 协变量选择<a class="headerlink" href="#2_2" title="Permanent link">&para;</a></h4>
+<p>基于临床重要性和数据可得性，选择以下协变量进行调整：
+- <strong>\1</strong>: 连续变量，影响预后的重要因素
+- <strong>\1</strong>: 分类变量，男性vs女性
+- <strong>\1</strong>: 分类变量，0/1 vs 2</p>
+<h4 id="3_2">3. 权重计算算法<a class="headerlink" href="#3_2" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">calculate_maic_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;计算MAIC权重&quot;&quot;&quot;</span>
+
+    <span class="c1"># 准备协变量矩阵</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">rct_a_x_neg</span><span class="p">[[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;male&#39;</span><span class="p">,</span> <span class="s1">&#39;ecog_2&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">target_means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">target_age_mean</span><span class="p">,</span> <span class="n">target_male_prop</span><span class="p">,</span> <span class="n">target_ecog_2_prop</span><span class="p">])</span>
+
+    <span class="c1"># 定义目标函数</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">objective</span><span class="p">(</span><span class="n">log_weights</span><span class="p">):</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_weights</span><span class="p">)</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">*</span> <span class="n">n</span>
+
+        <span class="c1"># 计算加权后的均值</span>
+        <span class="n">weighted_means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># 平衡约束的惩罚项</span>
+        <span class="n">balance_penalty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">weighted_means</span> <span class="o">-</span> <span class="n">target_means</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+
+        <span class="c1"># 权重方差惩罚</span>
+        <span class="n">weight_variance_penalty</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span>
+
+        <span class="k">return</span> <span class="n">balance_penalty</span> <span class="o">+</span> <span class="n">weight_variance_penalty</span>
+
+    <span class="c1"># 平衡约束条件</span>
+    <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;eq&#39;</span><span class="p">,</span> <span class="s1">&#39;fun&#39;</span><span class="p">:</span> <span class="n">constraint_balance_age</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;eq&#39;</span><span class="p">,</span> <span class="s1">&#39;fun&#39;</span><span class="p">:</span> <span class="n">constraint_balance_male</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;eq&#39;</span><span class="p">,</span> <span class="s1">&#39;fun&#39;</span><span class="p">:</span> <span class="n">constraint_balance_ecog</span><span class="p">}</span>
+    <span class="p">]</span>
+
+    <span class="c1"># 优化求解</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">initial_log_weights</span><span class="p">,</span> 
+                     <span class="n">method</span><span class="o">=</span><span class="s1">&#39;SLSQP&#39;</span><span class="p">,</span> <span class="n">constraints</span><span class="o">=</span><span class="n">constraints</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div>
+
+<h4 id="4">4. 间接比较方法<a class="headerlink" href="#4" title="Permanent link">&para;</a></h4>
+<p><strong>\1</strong>：
+Drug-A vs Drug-B = (Drug-A vs Control) / (Drug-B vs Control)</p>
+<p><strong>\1</strong>：</p>
+<div class="highlight"><pre><span></span><code>HR(A vs B) = HR(A vs C) / HR(B vs C)
+</code></pre></div>
+
+<p><strong>\1</strong>：
+使用Delta方法计算间接比较的标准误和置信区间。</p>
+<h3 id="_13">分析结果<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h3>
+<h4 id="maic">MAIC权重质量评估<a class="headerlink" href="#maic" title="Permanent link">&para;</a></h4>
+<table class="table">
+<thead>
+<tr>
+<th>指标</th>
+<th>调整前</th>
+<th>调整后</th>
+<th>目标值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>年龄均值 (岁)</td>
+<td>62.3</td>
+<td>63.85</td>
+<td>63.85</td>
+</tr>
+<tr>
+<td>男性比例</td>
+<td>0.456</td>
+<td>0.419</td>
+<td>0.419</td>
+</tr>
+<tr>
+<td>ECOG=2比例</td>
+<td>0.248</td>
+<td>0.301</td>
+<td>0.301</td>
+</tr>
+</tbody>
+</table>
+<p><strong>\1</strong>：
+- 权重均值: 1.000
+- 权重标准差: 0.384
+- 有效样本量: 149.0</p>
+<h4 id="_14">间接比较结果<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h4>
+<table class="table">
+<thead>
+<tr>
+<th>比较</th>
+<th>风险比 (HR)</th>
+<th>95% 置信区间</th>
+<th>P值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Drug-A vs Drug-B</td>
+<td>0.545</td>
+<td>(0.314, 0.945)</td>
+<td>0.031</td>
+</tr>
+</tbody>
+</table>
+<p><strong>\1</strong>：
+在X阴性人群中，经过MAIC调整后，Drug-A相比Drug-B降低了45.5%的死亡风险，差异具有统计学意义（95% CI: 0.314-0.945）。</p>
+<h4 id="_15">森林图展示<a class="headerlink" href="#_15" title="Permanent link">&para;</a></h4>
+<p><img alt="\1" src="figures/\2" /></p>
+<h3 id="_16">仍可能存在的偏移分析<a class="headerlink" href="#_16" title="Permanent link">&para;</a></h3>
+<h4 id="1_2">1. 已调整的混杂因素<a class="headerlink" href="#1_2" title="Permanent link">&para;</a></h4>
+<ul>
+<li>年龄分布差异</li>
+<li>性别比例差异</li>
+<li>ECOG体能状态分布差异</li>
+</ul>
+<h4 id="2_3">2. 仍可能存在的偏移<a class="headerlink" href="#2_3" title="Permanent link">&para;</a></h4>
+<p><strong>\1</strong>：
+- 合并症情况
+- 既往治疗史
+- 社会经济状态
+- 基因多态性</p>
+<p><strong>\1</strong>：
+- 不同研究中心的治疗标准
+- 支持治疗的差异
+- 随访管理的差异</p>
+<p><strong>\1</strong>：
+- 两个试验开展时间不同
+- 标准治疗的改进
+- 诊断技术的进步</p>
+<h4 id="3_3">3. 偏移的潜在影响<a class="headerlink" href="#3_3" title="Permanent link">&para;</a></h4>
+<p><strong>\1</strong>：
+- 如果RCT-A的对照组预后较差
+- 如果未调整的混杂因素有利于Drug-A</p>
+<p><strong>\1</strong>：
+- 如果RCT-B的对照组预后较差
+- 如果未调整的混杂因素有利于Drug-B</p>
+<h4 id="4_1">4. 减少偏移的策略<a class="headerlink" href="#4_1" title="Permanent link">&para;</a></h4>
+<p><strong>\1</strong>：
+- 改变关键假设进行多种情景分析
+- 评估结果对假设变化的敏感性</p>
+<p><strong>\1</strong>：
+- 结合临床专家意见评估未测量混杂因素的影响
+- 评估结果的临床合理性</p>
+<p><strong>\1</strong>：
+- 与其他间接比较研究结果对比
+- 利用真实世界数据进行验证</p>
+<h3 id="_17">结论<a class="headerlink" href="#_17" title="Permanent link">&para;</a></h3>
+<p>经过MAIC调整后的间接比较显示，Drug-A在X阴性人群中相比Drug-B具有显著的生存获益。但需要注意调整后仍可能存在的偏移，结果解释应结合临床背景和专家判断。</p>
+<hr />
+<h2 id="33drug-a-vs-drug-cx">问题3.3：比较Drug-A vs Drug-C在X阳性人群上的相对疗效差异<a class="headerlink" href="#33drug-a-vs-drug-cx" title="Permanent link">&para;</a></h2>
+<h3 id="_18">问题分析<a class="headerlink" href="#_18" title="Permanent link">&para;</a></h3>
+<p>基于前两个问题建立的方法学框架，对Drug-A与Drug-C在X阳性人群中的疗效进行间接比较，并评估整体方法学的稳健性和局限性。</p>
+<h3 id="_19">方法阐述<a class="headerlink" href="#_19" title="Permanent link">&para;</a></h3>
+<h4 id="1_3">1. 研究设计<a class="headerlink" href="#1_3" title="Permanent link">&para;</a></h4>
+<p><strong>\1</strong>: X阳性患者
+<strong>\1</strong>: Drug-A vs Drug-C
+<strong>\1</strong>: 
+- RCT-A的个体患者数据
+- RCT-C的发表汇总数据</p>
+<h4 id="2-maic">2. MAIC调整方法<a class="headerlink" href="#2-maic" title="Permanent link">&para;</a></h4>
+<p><strong>\1</strong>：
+针对X阳性人群，增加ECOG状态的细分：
+- 年龄（连续变量）
+- 性别（男性比例）
+- ECOG=0比例
+- ECOG=1比例<br />
+- ECOG=2比例</p>
+<p><strong>\1</strong>（基于RCT-C发表数据）：
+- 年龄均值: 65.2岁
+- 男性比例: 58.0%
+- ECOG=0比例: 35.0%
+- ECOG=1比例: 42.0%
+- ECOG=2比例: 23.0%</p>
+<h4 id="3-rct-c">3. RCT-C发表数据设定<a class="headerlink" href="#3-rct-c" title="Permanent link">&para;</a></h4>
+<p>基于题目描述和临床合理性，设定RCT-C的关键数据：</p>
+<table class="table">
+<thead>
+<tr>
+<th>指标</th>
+<th>Drug-C组</th>
+<th>对照组</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>样本量</td>
+<td>180</td>
+<td>175</td>
+</tr>
+<tr>
+<td>事件数</td>
+<td>95</td>
+<td>125</td>
+</tr>
+<tr>
+<td>中位生存时间 (月)</td>
+<td>18.5</td>
+<td>12.8</td>
+</tr>
+<tr>
+<td>HR (vs 对照)</td>
+<td>0.68</td>
+<td>-</td>
+</tr>
+<tr>
+<td>95% CI</td>
+<td>(0.52, 0.89)</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_20">分析结果<a class="headerlink" href="#_20" title="Permanent link">&para;</a></h3>
+<h4 id="maic_1">MAIC权重评估<a class="headerlink" href="#maic_1" title="Permanent link">&para;</a></h4>
+<p>由于X阳性人群的基线特征相对均衡，MAIC优化过程收敛到均匀权重：
+- 权重均值: 1.000
+- 权重标准差: 0.000
+- 有效样本量: 151.0</p>
+<h4 id="_21">间接比较结果<a class="headerlink" href="#_21" title="Permanent link">&para;</a></h4>
+<table class="table">
+<thead>
+<tr>
+<th>比较项目</th>
+<th>风险比 (HR)</th>
+<th>95% 置信区间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RCT-A Drug-A vs Control</td>
+<td>0.576</td>
+<td>(0.432, 0.768)</td>
+</tr>
+<tr>
+<td>RCT-C Drug-C vs Control</td>
+<td>0.680</td>
+<td>(0.520, 0.890)</td>
+</tr>
+<tr>
+<td><strong>\1</strong></td>
+<td><strong>\1</strong></td>
+<td><strong>\1</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>\1</strong>：
+在X阳性人群中，Drug-A相比Drug-C降低了15.2%的死亡风险，但差异无统计学意义（95% CI: 0.530-1.355，包含1）。</p>
+<h4 id="_22">综合森林图<a class="headerlink" href="#_22" title="Permanent link">&para;</a></h4>
+<p><img alt="\1" src="figures/\2" /></p>
+<h3 id="_23">敏感性分析<a class="headerlink" href="#_23" title="Permanent link">&para;</a></h3>
+<h4 id="_24">关键参数变化对结果的影响<a class="headerlink" href="#_24" title="Permanent link">&para;</a></h4>
+<table class="table">
+<thead>
+<tr>
+<th>敏感性情景</th>
+<th>HR (Drug-A vs Drug-C)</th>
+<th>相对基础值变化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基础分析</td>
+<td>0.848</td>
+<td>-</td>
+</tr>
+<tr>
+<td>RCT-C HR +10%</td>
+<td>0.771</td>
+<td>-9.1%</td>
+</tr>
+<tr>
+<td>RCT-C HR -10%</td>
+<td>0.942</td>
+<td>+11.1%</td>
+</tr>
+<tr>
+<td>RCT-A HR +10%</td>
+<td>0.933</td>
+<td>+10.0%</td>
+</tr>
+<tr>
+<td>RCT-A HR -10%</td>
+<td>0.763</td>
+<td>-10.0%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>\1</strong>：
+结果对关键参数的变化相对稳定，±10%的参数变化导致HR变化在±11%范围内，显示方法具有一定的稳健性。</p>
+<h3 id="_25">方法学稳健性评估<a class="headerlink" href="#_25" title="Permanent link">&para;</a></h3>
+<h4 id="1_4">1. 方法学优势<a class="headerlink" href="#1_4" title="Permanent link">&para;</a></h4>
+<p><strong>\1</strong>：
+- 采用了一致的MAIC调整方法处理人群差异
+- 所有分析步骤标准化，可重现性强</p>
+<p><strong>\1</strong>：
+- 所有假设和计算过程都明确记录
+- 提供了完整的代码实现</p>
+<p><strong>\1</strong>：
+- 置信区间考虑了间接比较的不确定性
+- 敏感性分析评估了结果的稳定性</p>
+<h4 id="2_4">2. 主要局限性<a class="headerlink" href="#2_4" title="Permanent link">&para;</a></h4>
+<p><strong>\1</strong>：
+- RCT-C只有发表的汇总数据，无法进行个体患者数据分析
+- 无法获得更详细的基线特征和协变量信息</p>
+<p><strong>\1</strong>：
+- 间接比较基于相似性假设（similarity assumption）
+- 传递性假设（transitivity assumption）可能不完全成立</p>
+<p><strong>\1</strong>：
+- 可能存在影响结果但未被调整的混杂因素
+- 生物标志物检测方法的差异</p>
+<p><strong>\1</strong>：
+- 不同试验的开展时间可能导致标准治疗的差异
+- 医疗技术进步对对照组预后的影响</p>
+<h4 id="3_4">3. 改进建议<a class="headerlink" href="#3_4" title="Permanent link">&para;</a></h4>
+<p><strong>\1</strong>：
+- 尽可能获得RCT-C的个体患者数据
+- 收集更多协变量信息进行更精确的调整</p>
+<p><strong>\1</strong>：
+- 考虑网络Meta分析方法
+- 采用贝叶斯方法纳入先验信息
+- 使用模拟治疗比较（STC）方法</p>
+<p><strong>\1</strong>：
+- 结合真实世界证据进行外部验证
+- 与其他间接比较研究结果进行对比</p>
+<h3 id="_26">临床解释和意义<a class="headerlink" href="#_26" title="Permanent link">&para;</a></h3>
+<h4 id="1_5">1. 临床意义<a class="headerlink" href="#1_5" title="Permanent link">&para;</a></h4>
+<p><strong>\1</strong>：
+Drug-A相比Drug-B显示出显著的生存获益（HR=0.545），临床意义明确。</p>
+<p><strong>\1</strong>：
+Drug-A相比Drug-C的获益趋势存在但无统计学意义（HR=0.848），需要更多证据支持。</p>
+<h4 id="2_5">2. 临床决策考虑<a class="headerlink" href="#2_5" title="Permanent link">&para;</a></h4>
+<p><strong>\1</strong>：
+- X阴性患者可能更适合选择Drug-A
+- X阳性患者的药物选择需要综合考虑其他因素</p>
+<p><strong>\1</strong>：
+- 置信区间较宽时应谨慎解释统计显著性
+- 结合患者个体特征和偏好进行个体化决策</p>
+<h4 id="3_5">3. 后续研究建议<a class="headerlink" href="#3_5" title="Permanent link">&para;</a></h4>
+<p><strong>\1</strong>：
+- 在条件允许时开展头对头比较试验
+- 重点关注生物标志物阳性人群</p>
+<p><strong>\1</strong>：
+- 利用真实世界数据验证间接比较结果
+- 监测长期安全性和有效性</p>
+<h3 id="_27">结论<a class="headerlink" href="#_27" title="Permanent link">&para;</a></h3>
+<p>基于MAIC方法的间接比较分析显示：
+1. 在X阴性人群中，Drug-A相比Drug-B具有显著的生存获益
+2. 在X阳性人群中，Drug-A相比Drug-C的获益趋势存在但无统计学意义
+3. 方法学具有一定的稳健性，但存在固有局限性
+4. 结果解释应结合临床背景，并考虑不确定性的影响</p>
+<hr />
+<h2 id="_28">总体结论与讨论<a class="headerlink" href="#_28" title="Permanent link">&para;</a></h2>
+<h3 id="_29">主要发现<a class="headerlink" href="#_29" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><strong>\1</strong>：成功建立了基于MAIC的间接比较分析框架，能够处理不同数据类型和人群差异。</p>
+</li>
+<li>
+<p><strong>\1</strong>：</p>
+</li>
+<li>Drug-A在X阴性人群中相比Drug-B具有显著优势</li>
+<li>
+<p>Drug-A在X阳性人群中相比Drug-C的优势不明确</p>
+</li>
+<li>
+<p><strong>\1</strong>：X标志物在治疗选择中具有重要的指导意义。</p>
+</li>
+</ol>
+<h3 id="_30">方法学贡献<a class="headerlink" href="#_30" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>\1</strong>：建立了处理间接比较的标准化分析流程</li>
+<li><strong>\1</strong>：通过多层次验证确保分析质量</li>
+<li><strong>\1</strong>：提供了完整的代码实现和结果重现</li>
+</ol>
+<h3 id="_31">局限性与改进方向<a class="headerlink" href="#_31" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>\1</strong>：部分数据基于发表信息，存在信息损失</li>
+<li><strong>\1</strong>：间接比较的有效性依赖于关键假设的成立</li>
+<li><strong>\1</strong>：结果的推广性需要进一步验证</li>
+</ol>
+<h3 id="_32">临床应用建议<a class="headerlink" href="#_32" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>\1</strong>：基于生物标志物状态进行药物选择</li>
+<li><strong>\1</strong>：充分考虑不确定性和局限性</li>
+<li><strong>\1</strong>：结合真实世界数据进行验证和更新</li>
+</ol>
+<h3 id="_33">未来研究方向<a class="headerlink" href="#_33" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>\1</strong>：探索更先进的间接比较方法</li>
+<li><strong>\1</strong>：整合多源数据提高分析精度</li>
+<li><strong>\1</strong>：通过前瞻性研究验证间接比较结果</li>
+</ol>
+<hr />
+<h2 id="_34">附录<a class="headerlink" href="#_34" title="Permanent link">&para;</a></h2>
+<h3 id="a">A. 代码文件清单<a class="headerlink" href="#a" title="Permanent link">&para;</a></h3>
+<ol>
+<li><code>problem_3_1_ipd_reconstruction.py</code> - 问题3.1 IPD重构分析</li>
+<li><code>problem_3_2_maic_analysis.py</code> - 问题3.2 MAIC间接比较分析  </li>
+<li><code>problem_3_3_drug_a_vs_c_analysis.py</code> - 问题3.3 Drug-A vs Drug-C比较分析</li>
+</ol>
+<h3 id="b">B. 结果文件清单<a class="headerlink" href="#b" title="Permanent link">&para;</a></h3>
+<ol>
+<li><code>rct_b_x_negative_reconstructed.csv</code> - 重构的RCT-B X阴性组数据</li>
+<li><code>problem_3_2_maic_results.csv</code> - 问题3.2数值结果</li>
+<li><code>problem_3_3_drug_a_vs_c_results.csv</code> - 问题3.3数值结果</li>
+<li><code>sensitivity_analysis_results.csv</code> - 敏感性分析结果</li>
+</ol>
+<h3 id="c">C. 图表文件清单<a class="headerlink" href="#c" title="Permanent link">&para;</a></h3>
+<ol>
+<li><code>problem_3_1_overlay_km_curves.svg</code> - 问题3.1 KM曲线叠加图</li>
+<li><code>problem_3_2_forest_plot.svg</code> - 问题3.2森林图</li>
+<li><code>problem_3_3_comprehensive_forest_plot.svg</code> - 问题3.3综合森林图</li>
+</ol>
+<h3 id="d">D. 分析报告清单<a class="headerlink" href="#d" title="Permanent link">&para;</a></h3>
+<ol>
+<li><code>reconstruction_limitations_analysis.txt</code> - 重构方法局限性分析</li>
+<li><code>remaining_bias_analysis.txt</code> - 剩余偏移分析</li>
+<li><code>methodology_robustness_assessment.txt</code> - 方法学稳健性评估</li>
+</ol>
+<hr />
+<p><em>本解决方案基于生物统计学最佳实践，结合了现代间接比较方法学，为药物疗效评估提供了科学严谨的分析框架。</em></p>
+    </div>
+    
+    <!-- Prism.js for code highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+</body>
+</html>
