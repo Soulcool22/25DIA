@@ -248,14 +248,7 @@ class IPDReconstructor:
         ax.set_xlabel('时间 (月)', fontsize=12)
         ax.set_ylabel('生存概率', fontsize=12)
         ax.grid(True, alpha=0.3)
-        ax.legend(loc='upper right', fontsize=10)
-        
-        # 添加风险表
-        ax.text(0.02, 0.02, 
-                '注：RCT-B数据基于已发表汇总数据重构\n重构方法存在不确定性，结果仅供参考',
-                transform=ax.transAxes, fontsize=9, 
-                bbox=dict(boxstyle="round,pad=0.3", facecolor="lightgray", alpha=0.7))
-        
+        ax.legend(loc='upper right', fontsize=10)            
         plt.tight_layout()
         
         # 保存图片
